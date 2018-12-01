@@ -3,6 +3,18 @@ macro_rules! test {
     (__internal $ident:tt . $part:tt) => {};
     (
         __internal $ident:tt . $part:tt
+        input: $output:expr,
+        $($tests:tt)*
+    ) => {
+        #[test]
+        fn input() {
+            assert_eq!(($ident.$part)(include_str!("input")).unwrap(), $output);
+        }
+        super::test!(__internal $ident.$part $($tests)*);
+    };
+    (__internal $ident:tt . $part:tt) => {};
+    (
+        __internal $ident:tt . $part:tt
         $name:ident: $input:expr => $output:expr,
         $($tests:tt)*
     ) => {
