@@ -3,15 +3,16 @@ use std::io::{self, Read};
 use structopt::StructOpt;
 
 mod day1;
+mod day2;
 #[cfg(test)]
 mod testmacros;
 
 struct Solution {
-    part1: fn(&str) -> Result<i32, failure::Error>,
-    part2: fn(&str) -> Result<i32, failure::Error>,
+    part1: fn(&str) -> Result<String, failure::Error>,
+    part2: fn(&str) -> Result<String, failure::Error>,
 }
 
-const SOLUTIONS: &[Solution] = &[day1::DAY1];
+const SOLUTIONS: &[Solution] = &[day1::DAY1, day2::DAY2];
 
 #[derive(StructOpt)]
 struct Options {

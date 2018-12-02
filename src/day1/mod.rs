@@ -8,7 +8,7 @@ pub(super) const DAY1: Solution = Solution {
         for line in input.lines() {
             sum += line.parse::<i32>()?;
         }
-        Ok(sum)
+        Ok(sum.to_string())
     },
     part2: |input| {
         let lines = input
@@ -22,7 +22,7 @@ pub(super) const DAY1: Solution = Solution {
         let mut found = HashSet::new();
         for line in lines.iter().cycle() {
             if !found.insert(sum) {
-                return Ok(sum);
+                return Ok(sum.to_string());
             }
             sum += line;
         }
@@ -39,7 +39,7 @@ mod test {
         example1: lines!(1 -2 3 1) => 3,
         example2: lines!(1 1 1) => 3,
         example3: lines!(1 1 -2) => 0,
-        example4: lines!(-1 -2 -3) => -6,
+        example4: lines!(-1 -2 -3) => "-6",
         input: 430,
     );
     test!(
