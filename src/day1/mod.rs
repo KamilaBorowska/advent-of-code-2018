@@ -45,6 +45,10 @@ mod test {
         example2: lines!(1 1 1) => 3,
         example3: lines!(1 1 -2) => 0,
         example4: lines!(-1 -2 -3) => "-6",
+        fn test_max_value() {
+            let input = format!("{}\n{}", i64::max_value(), i64::min_value());
+            assert_eq!((DAY1.part1)(&input).unwrap(), "-1");
+        }
         input: 430,
     );
     test!(
