@@ -38,7 +38,7 @@ mod test {
     test!(
         DAY1.part1,
         fn overflow_fails() {
-            assert!((DAY1.part2)(&format!("{}\n{0}", i64::max_value())).is_err());
+            assert!((DAY1.part1)(&format!("{}\n{0}", i64::max_value())).is_err());
         }
         empty: "" => 0,
         example1: lines!(1 -2 3 1) => 3,
