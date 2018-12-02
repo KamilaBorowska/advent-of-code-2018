@@ -1,12 +1,15 @@
 use crate::Solution;
-use failure::bail;
+use failure::{bail, err_msg};
 use std::collections::HashSet;
 
 pub(super) const DAY1: Solution = Solution {
     part1: |input| {
         let mut sum = 0;
         for line in input.lines() {
-            sum += line.parse::<i32>()?;
+            sum = line
+                .parse::<i64>()?
+                .checked_add(sum)
+                .ok_or_else(|| err_msg("Integer overflow"))?;
         }
         Ok(sum.to_string())
     },
@@ -14,7 +17,7 @@ pub(super) const DAY1: Solution = Solution {
         let lines = input
             .lines()
             .map(str::parse)
-            .collect::<Result<Vec<i32>, _>>()?;
+            .collect::<Result<Vec<i64>, _>>()?;
         if lines.is_empty() {
             bail!("Empty input");
         }
@@ -24,7 +27,9 @@ pub(super) const DAY1: Solution = Solution {
             if !found.insert(sum) {
                 return Ok(sum.to_string());
             }
-            sum += line;
+            sum = line
+                .checked_add(sum)
+                .ok_or_else(|| err_msg("Integer overflow"))?;
         }
         unreachable!()
     },
@@ -35,6 +40,9 @@ mod test {
     use crate::test;
     test!(
         DAY1.part1,
+        fn overflow_fails() {
+            assert!((DAY1.part2)(&format!("{}\n{0}", i64::max_value())).is_err());
+        }
         empty: "" => 0,
         example1: lines!(1 -2 3 1) => 3,
         example2: lines!(1 1 1) => 3,
@@ -44,6 +52,9 @@ mod test {
     );
     test!(
         DAY1.part2,
+        fn overflow_fails() {
+            assert!((DAY1.part2)(&i64::max_value().to_string()).is_err());
+        }
         fn empty_input_fails() {
             assert!((DAY1.part2)("").is_err());
         }
