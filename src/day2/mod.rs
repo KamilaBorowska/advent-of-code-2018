@@ -53,6 +53,12 @@ mod test {
     );
     test!(
         DAY2.part2,
+        fn empty_input_fails() {
+            assert!((DAY2.part2)("").is_err());
+        }
+        fn input_with_no_common_ids_fails() {
+            assert!((DAY2.part2)(lines!("aa" "bb")).is_err());
+        }
         example: lines!("abcde" "fghij" "klmno" "pqrst" "fguij" "axcye" "wvxyz") => "fgij",
         input: "lnfqdscwjyteorambzuchrgpx",
     );
