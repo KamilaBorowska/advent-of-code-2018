@@ -8,7 +8,7 @@ macro_rules! test {
     ) => {
         #[test]
         fn input() {
-            assert_eq!(($ident.$part)(include_str!("input")).unwrap(), $output);
+            assert_eq!(($ident.$part)(include_str!("input")).unwrap(), concat!($output));
         }
         super::test!(__internal $ident.$part $($tests)*);
     };
@@ -20,7 +20,7 @@ macro_rules! test {
     ) => {
         #[test]
         fn $name() {
-            assert_eq!(($ident.$part)($input).unwrap(), $output);
+            assert_eq!(($ident.$part)($input).unwrap(), concat!($output));
         }
         super::test!(__internal $ident.$part $($tests)*);
     };
