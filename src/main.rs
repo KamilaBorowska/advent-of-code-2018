@@ -1,5 +1,5 @@
 use failure::err_msg;
-use std::io::{self, Read};
+use std::io::{self, Read, Write};
 use structopt::StructOpt;
 
 mod day1;
@@ -27,7 +27,7 @@ fn main() -> Result<(), failure::Error> {
         .ok_or_else(|| err_msg("Day number out of range"))?;
     let mut input = String::new();
     io::stdin().read_to_string(&mut input)?;
-    println!("Part 1: {}", (solution.part1)(&input)?);
-    println!("Part 2: {}", (solution.part2)(&input)?);
+    writeln!(io::stdout(), "Part 1: {}", (solution.part1)(&input)?)?;
+    writeln!(io::stdout(), "Part 2: {}", (solution.part2)(&input)?)?;
     Ok(())
 }

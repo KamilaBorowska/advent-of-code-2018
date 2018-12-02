@@ -24,7 +24,8 @@ pub(super) const DAY2: Solution = Solution {
         let lines: Vec<&str> = input.lines().collect();
         let pair = lines
             .iter()
-            .flat_map(|&a| lines.iter().map(move |&b| (a, b)))
+            .enumerate()
+            .flat_map(|(i, &a)| lines[i + 1..].iter().map(move |&b| (a, b)))
             .find(|&pair| differs_by_exactly_one_character(pair))
             .ok_or_else(|| err_msg("No common IDs found"))?;
         Ok(zip_chars(pair)
@@ -53,6 +54,12 @@ mod test {
     );
     test!(
         DAY2.part2,
+        fn empty_input_fails() {
+            assert!((DAY2.part2)("").is_err());
+        }
+        fn input_with_no_common_ids_fails() {
+            assert!((DAY2.part2)(lines!("aa" "bb")).is_err());
+        }
         example: lines!("abcde" "fghij" "klmno" "pqrst" "fguij" "axcye" "wvxyz") => "fgij",
         input: "lnfqdscwjyteorambzuchrgpx",
     );

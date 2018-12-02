@@ -18,9 +18,6 @@ pub(super) const DAY1: Solution = Solution {
             .lines()
             .map(str::parse)
             .collect::<Result<Vec<i64>, _>>()?;
-        if lines.is_empty() {
-            bail!("Empty input");
-        }
         let mut sum = 0;
         let mut found = HashSet::new();
         for line in lines.iter().cycle() {
@@ -31,7 +28,7 @@ pub(super) const DAY1: Solution = Solution {
                 .checked_add(sum)
                 .ok_or_else(|| err_msg("Integer overflow"))?;
         }
-        unreachable!()
+        bail!("Empty input");
     },
 };
 
