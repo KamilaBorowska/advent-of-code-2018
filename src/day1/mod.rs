@@ -15,9 +15,6 @@ pub(super) const DAY1: Solution = Solution {
             .lines()
             .map(str::parse)
             .collect::<Result<Vec<i32>, _>>()?;
-        if lines.is_empty() {
-            bail!("Empty input");
-        }
         let mut sum = 0;
         let mut found = HashSet::new();
         for line in lines.iter().cycle() {
@@ -26,7 +23,7 @@ pub(super) const DAY1: Solution = Solution {
             }
             sum += line;
         }
-        unreachable!()
+        bail!("Empty input");
     },
 };
 
