@@ -6,4 +6,5 @@ edition = "2018"
 
 [dependencies]
 failure = "0.1.3"
+nom = "4.1.1"
 structopt = "0.2.13"
