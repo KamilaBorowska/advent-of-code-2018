@@ -68,7 +68,7 @@ struct Claim {
     area_y: u16,
 }
 
-named!(claim(CompleteStr) -> Claim, do_parse!(
+named!(claim(CompleteStr<'_>) -> Claim, do_parse!(
     tag!("#") >>
     num: integer >>
     tag!(" @ ") >>
@@ -82,7 +82,7 @@ named!(claim(CompleteStr) -> Claim, do_parse!(
     (Claim { num, position_x, position_y, area_x, area_y })
 ));
 
-named!(integer<CompleteStr, u16>, map_res!(take_while1_s!(|c| char::is_digit(c, 10)), |x: CompleteStr| x.parse()));
+named!(integer<CompleteStr<'_>, u16>, map_res!(take_while1_s!(|c| char::is_digit(c, 10)), |x: CompleteStr<'_>| x.parse()));
 
 #[derive(Copy, Clone, PartialEq, Eq)]
 enum ClaimState {
