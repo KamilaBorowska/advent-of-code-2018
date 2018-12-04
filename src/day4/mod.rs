@@ -49,7 +49,7 @@ struct LineParser<'a> {
     asleep_start_time: Option<u32>,
 }
 
-impl<'a> LineParser<'a> {
+impl LineParser<'_> {
     fn new(input: &str) -> LineParser<'_> {
         LineParser {
             iterator: get_sorted_lines_iter(input),
