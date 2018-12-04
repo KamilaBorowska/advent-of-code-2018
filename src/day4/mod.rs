@@ -50,7 +50,7 @@ struct LineParser<'a> {
 }
 
 impl LineParser<'_> {
-    fn new(input: &str) -> LineParser {
+    fn new(input: &str) -> LineParser<'_> {
         LineParser {
             iterator: get_sorted_lines_iter(input),
             current_guard: None,
@@ -106,29 +106,41 @@ enum Action {
     WakesUp,
 }
 
-named!(action_line(CompleteStr) -> Line, do_parse!(
-    tag!("[") >>
-    integer >>
-    tag!("-") >>
-    integer >>
-    tag!("-") >>
-    integer >>
-    tag!(" ") >>
-    integer >>
-    tag!(":") >>
-    minute: integer >>
-    tag!("] ") >>
-    action: action >>
-    (Line { minute, action })
-));
+named!(
+    action_line(CompleteStr<'_>) -> Line,
+    do_parse!(
+        tag!("[")
+            >> integer
+            >> tag!("-")
+            >> integer
+            >> tag!("-")
+            >> integer
+            >> tag!(" ")
+            >> integer
+            >> tag!(":")
+            >> minute: integer
+            >> tag!("] ")
+            >> action: action
+            >> (Line { minute, action })
+    )
+);
 
-named!(integer(CompleteStr) -> u32, map_res!(take_while1_s!(|c| char::is_digit(c, 10)), |x: CompleteStr| x.parse()));
+named!(
+    integer(CompleteStr<'_>) -> u32,
+    map_res!(
+        take_while1_s!(|c| char::is_digit(c, 10)),
+        |x: CompleteStr<'_>| x.parse()
+    )
+);
 
-named!(action(CompleteStr) -> Action, alt!(
-    delimited!(tag!("Guard #"), integer, tag!(" begins shift")) => { |guard| Action::BeginsShift { guard } } |
-    tag!("falls asleep") => { |_| Action::FallsAsleep } |
-    tag!("wakes up") => { |_| Action::WakesUp }
-));
+named!(
+    action(CompleteStr<'_>) -> Action,
+    alt!(
+        delimited!(tag!("Guard #"), integer, tag!(" begins shift")) => { |guard| Action::BeginsShift { guard } } |
+        tag!("falls asleep") => { |_| Action::FallsAsleep } |
+        tag!("wakes up") => { |_| Action::WakesUp }
+    )
+);
 
 fn find_max_value<K>(map: &HashMap<K, usize>) -> Option<&K>
 where
