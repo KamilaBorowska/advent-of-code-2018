@@ -1,3 +1,7 @@
+stages:
+- test
+- build
+
 test:beta:
   script: &test_script
   - &print_version rustc --version && cargo --version
@@ -20,4 +24,14 @@ rustfmt:
   - *print_version
   - rustup component add rustfmt-preview
   - cargo fmt -- --check
+  image: rustlang/rust:nightly
+
+build:
+  stage: build
+  script:
+  - *print_version
+  - cargo build --release
+  artifacts:
+    paths:
+    - target/release/advent-of-code-2018
   image: rustlang/rust:nightly
