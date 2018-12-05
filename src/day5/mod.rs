@@ -3,49 +3,40 @@ use failure::err_msg;
 use std::collections::HashSet;
 
 pub(super) const DAY5: Solution = Solution {
-    part1: |input| {
-        let mut queue: Vec<char> = Vec::new();
-        for b in input.trim().chars() {
-            let reacts = queue
-                .last()
-                .map(|&a| a != b && a.to_ascii_uppercase() == b.to_ascii_uppercase())
-                .unwrap_or(false);
-            if reacts {
-                queue.pop();
-            } else {
-                queue.push(b);
-            }
-        }
-        Ok(queue.len().to_string())
-    },
+    part1: |input| Ok(get_queue_len(input.trim().chars()).to_string()),
     part2: |input| {
         let input = input.trim();
         let letters: HashSet<char> = input.chars().filter(|c| c.is_ascii_lowercase()).collect();
-        let min = letters
+        Ok(letters
             .iter()
             .map(|&letter| {
-                let mut queue: Vec<char> = Vec::new();
-                for b in input
-                    .chars()
-                    .filter(|&l| l != letter as char && l != letter.to_ascii_uppercase() as char)
-                {
-                    let reacts = queue
-                        .last()
-                        .map(|&a| a != b && a.to_ascii_uppercase() == b.to_ascii_uppercase())
-                        .unwrap_or(false);
-                    if reacts {
-                        queue.pop();
-                    } else {
-                        queue.push(b);
-                    }
-                }
-                queue.len()
+                get_queue_len(
+                    input
+                        .chars()
+                        .filter(|&l| l != letter && l != letter.to_ascii_uppercase()),
+                )
             })
             .min()
-            .ok_or_else(|| err_msg("Empty input"))?;
-        Ok(min.to_string())
+            .ok_or_else(|| err_msg("Empty input"))?
+            .to_string())
     },
 };
+
+fn get_queue_len(input: impl Iterator<Item = char>) -> usize {
+    let mut queue: Vec<char> = Vec::new();
+    for b in input {
+        let reacts = queue
+            .last()
+            .map(|&a| a != b && a.to_ascii_uppercase() == b.to_ascii_uppercase())
+            .unwrap_or(false);
+        if reacts {
+            queue.pop();
+        } else {
+            queue.push(b);
+        }
+    }
+    queue.len()
+}
 
 #[cfg(test)]
 mod test {
