@@ -7,6 +7,7 @@ mod day2;
 mod day3;
 mod day4;
 mod day5;
+mod day6;
 #[cfg(test)]
 mod testmacros;
 
@@ -15,7 +16,14 @@ struct Solution {
     part2: fn(&str) -> Result<String, failure::Error>,
 }
 
-const SOLUTIONS: &[Solution] = &[day1::DAY1, day2::DAY2, day3::DAY3, day4::DAY4, day5::DAY5];
+const SOLUTIONS: &[Solution] = &[
+    day1::DAY1,
+    day2::DAY2,
+    day3::DAY3,
+    day4::DAY4,
+    day5::DAY5,
+    day6::DAY6,
+];
 
 #[derive(StructOpt)]
 struct Options {
