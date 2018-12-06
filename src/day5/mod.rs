@@ -25,10 +25,9 @@ pub(super) const DAY5: Solution = Solution {
 fn get_queue_len(input: impl Iterator<Item = char>) -> usize {
     let mut queue: Vec<char> = Vec::new();
     for b in input {
-        let reacts = queue
-            .last()
-            .map(|&a| a != b && a.to_ascii_uppercase() == b.to_ascii_uppercase())
-            .unwrap_or(false);
+        let reacts = queue.last().map_or(false, |&a| {
+            a != b && a.to_ascii_uppercase() == b.to_ascii_uppercase()
+        });
         if reacts {
             queue.pop();
         } else {
