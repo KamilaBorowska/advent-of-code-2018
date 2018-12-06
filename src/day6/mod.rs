@@ -77,6 +77,7 @@ struct Point {
 
 fn find_region_size(input: &str, max_total_distance: i32) -> Result<usize, failure::Error> {
     let points = get_points(input)?;
+    let range_modifier = max_total_distance / points.len() as i32;
     let (min_x, max_x) = points
         .iter()
         .map(|p| p.x)
@@ -84,10 +85,8 @@ fn find_region_size(input: &str, max_total_distance: i32) -> Result<usize, failu
         .into_option()
         .ok_or_else(|| err_msg("No points"))?;
     let (min_y, max_y) = points.iter().map(|p| p.y).minmax().into_option().unwrap();
-    let safe_area = (min_x - max_total_distance..=max_x + max_total_distance)
-        .flat_map(|x| {
-            (min_y - max_total_distance..=max_y + max_total_distance).map(move |y| (y, x))
-        })
+    let safe_area = (min_x - range_modifier..=max_x + range_modifier)
+        .flat_map(|x| (min_y - range_modifier..=max_y + range_modifier).map(move |y| (y, x)))
         .filter(|(x, y)| {
             points
                 .iter()
