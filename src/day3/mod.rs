@@ -37,7 +37,7 @@ fn get_claim_table(input: &str) -> Result<HashMap<(u16, u16), ClaimState>, failu
     Ok(claimed)
 }
 
-fn get_claims<'a>(input: &'a str) -> impl Iterator<Item = Result<Claim, failure::Error>> + 'a {
+fn get_claims(input: &str) -> impl Iterator<Item = Result<Claim, failure::Error>> + '_ {
     input.lines().map(|line| {
         let (rest, claim) = claim(CompleteStr(line)).map_err(|_| err_msg("Parse failure"))?;
         if rest.is_empty() {
