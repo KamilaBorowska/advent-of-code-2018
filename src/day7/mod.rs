@@ -26,13 +26,10 @@ fn get_relation_map(input: &str) -> Result<HashMap<char, StepRelations>, failure
         let Dependency { requirement, then } = dependency?;
         relations
             .entry(requirement)
-            .or_insert_with(StepRelations::new)
+            .or_insert_with(StepRelations::default)
             .children
             .push(then);
-        relations
-            .entry(then)
-            .or_insert_with(StepRelations::new)
-            .parent_count += 1;
+        relations.entry(then).or_default().parent_count += 1;
     }
     Ok(relations)
 }
@@ -70,12 +67,6 @@ struct Dependency {
 struct StepRelations {
     parent_count: usize,
     children: Vec<char>,
-}
-
-impl StepRelations {
-    fn new() -> Self {
-        StepRelations::default()
-    }
 }
 
 fn get_initial_heap(relations: &HashMap<char, StepRelations>) -> BinaryHeap<Reverse<char>> {
