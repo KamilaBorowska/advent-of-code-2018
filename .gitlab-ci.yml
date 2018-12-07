@@ -2,10 +2,18 @@ stages:
 - test
 - build
 
-test:beta:
+test:1.31:
   script: &test_script
   - &print_version rustc --version && cargo --version
-  - cargo test --verbose
+  - cargo test --all --all-features --verbose
+  image: rust:1.31
+
+test:stable:
+  script: *test_script
+  image: rust:latest
+
+test:beta:
+  script: *test_script
   image: liuchong/rustup:beta
 
 test:nightly:
