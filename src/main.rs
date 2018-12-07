@@ -38,7 +38,7 @@ struct Options {
 fn main() -> Result<(), failure::Error> {
     let opt = Options::from_args();
     let solution = SOLUTIONS
-        .get(opt.day as usize - 1)
+        .get(usize::from(opt.day) - 1)
         .ok_or_else(|| err_msg("Day number out of range"))?;
     let input = match opt.input {
         Some(input) => input,
