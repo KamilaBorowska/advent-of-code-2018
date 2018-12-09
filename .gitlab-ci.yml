@@ -23,14 +23,14 @@ test:nightly:
 clippy:
   script:
   - *print_version
-  - rustup component add clippy-preview
+  - rustup component add clippy
   - cargo clippy --verbose
   image: rustlang/rust:nightly
 
 rustfmt:
   script:
   - *print_version
-  - rustup component add rustfmt-preview
+  - rustup component add rustfmt
   - cargo fmt -- --check
   image: rustlang/rust:nightly
 
