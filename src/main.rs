@@ -11,6 +11,7 @@ mod day6;
 mod day7;
 mod day8;
 mod day9;
+mod day10;
 #[cfg(test)]
 mod testmacros;
 
@@ -29,6 +30,7 @@ const SOLUTIONS: &[Solution] = &[
     day7::DAY7,
     day8::DAY8,
     day9::DAY9,
+    day10::DAY10,
 ];
 
 #[derive(StructOpt)]
