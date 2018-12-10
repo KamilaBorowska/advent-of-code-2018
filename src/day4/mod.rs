@@ -27,7 +27,7 @@ pub(super) const DAY4: Solution = Solution {
         }
         let worst_guard =
             find_max_value(&total_asleep_times).ok_or_else(|| err_msg("No guards"))?;
-        let minute = find_max_value(&asleep_times[&worst_guard]).unwrap();
+        let minute = find_max_value(&asleep_times[worst_guard]).unwrap();
         Ok((worst_guard * minute).to_string())
     },
     part2: |input| {
