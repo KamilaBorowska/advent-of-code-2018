@@ -85,3 +85,12 @@ impl Particle {
         self.position_y += self.velocity_y;
     }
 }
+
+#[cfg(test)]
+mod test {
+    use crate::test;
+    test!(
+        DAY10.part2,
+        input: 10_003,
+    );
+}
