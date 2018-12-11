@@ -20,7 +20,7 @@ pub(super) const DAY7: Solution = Solution {
     part2: |input| Ok(order_in_parallel(input, 5, 60)?.to_string()),
 };
 
-fn get_relation_map(input: &str) -> Result<HashMap<char, StepRelations>, Box<dyn Error>> {
+fn get_relation_map(input: &str) -> Result<HashMap<char, StepRelations>, Box<dyn Error + '_>> {
     let mut relations = HashMap::new();
     for dependency in get_dependencies(input) {
         let Dependency { requirement, then } = dependency?;
@@ -34,10 +34,11 @@ fn get_relation_map(input: &str) -> Result<HashMap<char, StepRelations>, Box<dyn
     Ok(relations)
 }
 
-fn get_dependencies(input: &str) -> impl Iterator<Item = Result<Dependency, Box<dyn Error>>> + '_ {
+fn get_dependencies(
+    input: &str,
+) -> impl Iterator<Item = Result<Dependency, Box<dyn Error + '_>>> + '_ {
     input.lines().map(|line| {
-        let (rest, point) =
-            dependency(CompleteStr(line)).map_err(|e| format!("Parse failure: {}", e))?;
+        let (rest, point) = dependency(CompleteStr(line))?;
         if rest.is_empty() {
             Ok(point)
         } else {
@@ -99,7 +100,7 @@ fn order_in_parallel(
     input: &str,
     elves: usize,
     additional_sleep: u32,
-) -> Result<u32, Box<dyn Error>> {
+) -> Result<u32, Box<dyn Error + '_>> {
     let mut relations = get_relation_map(input)?;
     let mut heap = get_initial_heap(&relations);
     let mut sleep_times = BinaryHeap::new();

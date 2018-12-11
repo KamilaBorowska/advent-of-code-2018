@@ -48,7 +48,7 @@ struct LineParser<'a> {
     asleep_start_time: Option<u32>,
 }
 
-impl LineParser<'_> {
+impl<'a> LineParser<'a> {
     fn new(input: &str) -> LineParser<'_> {
         LineParser {
             iterator: get_sorted_lines_iter(input),
@@ -57,7 +57,7 @@ impl LineParser<'_> {
         }
     }
 
-    fn next_sleep_range(&mut self) -> Result<Option<(u32, Range<u32>)>, Box<dyn Error>> {
+    fn next_sleep_range(&mut self) -> Result<Option<(u32, Range<u32>)>, Box<dyn Error + 'a>> {
         for line in &mut self.iterator {
             let Line { minute, action } = get_action_line(line)?;
             match action {
@@ -80,8 +80,8 @@ fn get_sorted_lines_iter(input: &str) -> vec::IntoIter<&str> {
     lines.into_iter()
 }
 
-fn get_action_line(line: &str) -> Result<Line, Box<dyn Error>> {
-    let (rest, action_line) = action_line(CompleteStr(line)).map_err(|_| "Parse failure")?;
+fn get_action_line(line: &str) -> Result<Line, Box<dyn Error + '_>> {
+    let (rest, action_line) = action_line(CompleteStr(line))?;
     if rest.is_empty() {
         Ok(action_line)
     } else {

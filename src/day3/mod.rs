@@ -24,7 +24,7 @@ pub(super) const DAY3: Solution = Solution {
     },
 };
 
-fn get_claim_table(input: &str) -> Result<HashMap<(u16, u16), ClaimState>, Box<dyn Error>> {
+fn get_claim_table(input: &str) -> Result<HashMap<(u16, u16), ClaimState>, Box<dyn Error + '_>> {
     let mut claimed = HashMap::new();
     for claim in get_claims(input) {
         for square in get_squares(&claim?) {
@@ -37,9 +37,9 @@ fn get_claim_table(input: &str) -> Result<HashMap<(u16, u16), ClaimState>, Box<d
     Ok(claimed)
 }
 
-fn get_claims(input: &str) -> impl Iterator<Item = Result<Claim, Box<dyn Error>>> + '_ {
+fn get_claims(input: &str) -> impl Iterator<Item = Result<Claim, Box<dyn Error + '_>>> + '_ {
     input.lines().map(|line| {
-        let (rest, claim) = claim(CompleteStr(line)).map_err(|_| "Parse failure")?;
+        let (rest, claim) = claim(CompleteStr(line))?;
         if rest.is_empty() {
             Ok(claim)
         } else {

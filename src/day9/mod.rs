@@ -35,9 +35,8 @@ fn get_max_score(players: usize, last_marble: u32) -> Result<String, Box<dyn Err
     Ok(scores.iter().max().unwrap().to_string())
 }
 
-fn get_puzzle_input(input: &str) -> Result<(usize, u32), Box<dyn Error>> {
-    let (rest, result) =
-        puzzle_input(CompleteStr(input)).map_err(|e| format!("Parse error: {}", e))?;
+fn get_puzzle_input(input: &str) -> Result<(usize, u32), Box<dyn Error + '_>> {
+    let (rest, result) = puzzle_input(CompleteStr(input))?;
     if rest.is_empty() {
         Ok(result)
     } else {

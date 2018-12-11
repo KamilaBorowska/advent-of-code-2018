@@ -44,12 +44,11 @@ pub(super) const DAY6: Solution = Solution {
     part2: |input| Ok(find_region_size(input, 10_000)?.to_string()),
 };
 
-fn get_points(input: &str) -> Result<Vec<Point>, Box<dyn Error>> {
+fn get_points(input: &str) -> Result<Vec<Point>, Box<dyn Error + '_>> {
     input
         .lines()
         .map(|line| {
-            let (rest, point) =
-                point(CompleteStr(line)).map_err(|e| format!("Parse failure: {}", e))?;
+            let (rest, point) = point(CompleteStr(line))?;
             if rest.is_empty() {
                 Ok(point)
             } else {
@@ -76,7 +75,7 @@ struct Point {
     count: u32,
 }
 
-fn find_region_size(input: &str, max_total_distance: i32) -> Result<usize, Box<dyn Error>> {
+fn find_region_size(input: &str, max_total_distance: i32) -> Result<usize, Box<dyn Error + '_>> {
     let points = get_points(input)?;
     let range_modifier = max_total_distance / points.len() as i32;
     let (min_x, max_x) = points

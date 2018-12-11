@@ -17,8 +17,8 @@ mod day9;
 mod testmacros;
 
 struct Solution {
-    part1: fn(&str) -> Result<String, Box<dyn Error>>,
-    part2: fn(&str) -> Result<String, Box<dyn Error>>,
+    part1: fn(&str) -> Result<String, Box<dyn Error + '_>>,
+    part2: fn(&str) -> Result<String, Box<dyn Error + '_>>,
 }
 
 const SOLUTIONS: &[Solution] = &[
@@ -56,7 +56,15 @@ fn main() -> Result<(), Box<dyn Error>> {
             input
         }
     };
-    writeln!(io::stdout(), "Part 1: {}", (solution.part1)(&input)?)?;
-    writeln!(io::stdout(), "Part 2: {}", (solution.part2)(&input)?)?;
+    writeln!(
+        io::stdout(),
+        "Part 1: {}",
+        (solution.part1)(&input).map_err(|e| e.to_string())?
+    )?;
+    writeln!(
+        io::stdout(),
+        "Part 2: {}",
+        (solution.part2)(&input).map_err(|e| e.to_string())?
+    )?;
     Ok(())
 }
