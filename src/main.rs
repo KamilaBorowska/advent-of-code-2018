@@ -1,4 +1,4 @@
-use failure::err_msg;
+use std::error::Error;
 use std::io::{self, Read, Write};
 use structopt::StructOpt;
 
@@ -17,8 +17,8 @@ mod day9;
 mod testmacros;
 
 struct Solution {
-    part1: fn(&str) -> Result<String, failure::Error>,
-    part2: fn(&str) -> Result<String, failure::Error>,
+    part1: fn(&str) -> Result<String, Box<dyn Error + '_>>,
+    part2: fn(&str) -> Result<String, Box<dyn Error + '_>>,
 }
 
 const SOLUTIONS: &[Solution] = &[
@@ -43,11 +43,11 @@ struct Options {
     input: Option<String>,
 }
 
-fn main() -> Result<(), failure::Error> {
+fn main() -> Result<(), Box<dyn Error>> {
     let opt = Options::from_args();
     let solution = SOLUTIONS
         .get(usize::from(opt.day) - 1)
-        .ok_or_else(|| err_msg("Day number out of range"))?;
+        .ok_or("Day number out of range")?;
     let input = match opt.input {
         Some(input) => input,
         None => {
@@ -56,7 +56,15 @@ fn main() -> Result<(), failure::Error> {
             input
         }
     };
-    writeln!(io::stdout(), "Part 1: {}", (solution.part1)(&input)?)?;
-    writeln!(io::stdout(), "Part 2: {}", (solution.part2)(&input)?)?;
+    writeln!(
+        io::stdout(),
+        "Part 1: {}",
+        (solution.part1)(&input).map_err(|e| e.to_string())?
+    )?;
+    writeln!(
+        io::stdout(),
+        "Part 2: {}",
+        (solution.part2)(&input).map_err(|e| e.to_string())?
+    )?;
     Ok(())
 }

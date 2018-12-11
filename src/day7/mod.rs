@@ -1,9 +1,9 @@
 use crate::Solution;
-use failure::{bail, format_err};
 use nom::types::CompleteStr;
 use nom::{anychar, call, do_parse, named, tag};
 use std::cmp::Reverse;
 use std::collections::{BinaryHeap, HashMap};
+use std::error::Error;
 use std::mem;
 
 pub(super) const DAY7: Solution = Solution {
@@ -20,7 +20,7 @@ pub(super) const DAY7: Solution = Solution {
     part2: |input| Ok(order_in_parallel(input, 5, 60)?.to_string()),
 };
 
-fn get_relation_map(input: &str) -> Result<HashMap<char, StepRelations>, failure::Error> {
+fn get_relation_map(input: &str) -> Result<HashMap<char, StepRelations>, Box<dyn Error + '_>> {
     let mut relations = HashMap::new();
     for dependency in get_dependencies(input) {
         let Dependency { requirement, then } = dependency?;
@@ -34,14 +34,15 @@ fn get_relation_map(input: &str) -> Result<HashMap<char, StepRelations>, failure
     Ok(relations)
 }
 
-fn get_dependencies(input: &str) -> impl Iterator<Item = Result<Dependency, failure::Error>> + '_ {
+fn get_dependencies(
+    input: &str,
+) -> impl Iterator<Item = Result<Dependency, Box<dyn Error + '_>>> + '_ {
     input.lines().map(|line| {
-        let (rest, point) =
-            dependency(CompleteStr(line)).map_err(|e| format_err!("Parse failure: {}", e))?;
+        let (rest, point) = dependency(CompleteStr(line))?;
         if rest.is_empty() {
             Ok(point)
         } else {
-            bail!("Text found in a line after a dependency");
+            Err("Text found in a line after a dependency")?
         }
     })
 }
@@ -99,7 +100,7 @@ fn order_in_parallel(
     input: &str,
     elves: usize,
     additional_sleep: u32,
-) -> Result<u32, failure::Error> {
+) -> Result<u32, Box<dyn Error + '_>> {
     let mut relations = get_relation_map(input)?;
     let mut heap = get_initial_heap(&relations);
     let mut sleep_times = BinaryHeap::new();

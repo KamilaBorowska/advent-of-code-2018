@@ -1,8 +1,8 @@
 use crate::Solution;
-use failure::{bail, err_msg, format_err};
 use itertools::Itertools;
 use nom::types::CompleteStr;
 use nom::{call, do_parse, error_position, map_res, named, tag, take_while1};
+use std::error::Error;
 
 pub(super) const DAY6: Solution = Solution {
     part1: |input| {
@@ -12,7 +12,7 @@ pub(super) const DAY6: Solution = Solution {
             .map(|p| p.x)
             .minmax()
             .into_option()
-            .ok_or_else(|| err_msg("No points"))?;
+            .ok_or("No points")?;
         let (min_y, max_y) = points.iter().map(|p| p.y).minmax().into_option().unwrap();
         for x in min_x..=max_x {
             for y in min_y..=max_y {
@@ -32,27 +32,27 @@ pub(super) const DAY6: Solution = Solution {
                 }
             }
         }
-        points
+        let max_point = points
             .iter()
             .filter(|&&Point { x, y, .. }| x != min_x && x != max_x && y != min_y && y != max_y)
             .map(|p| p.count)
             .max()
-            .ok_or_else(|| err_msg("No non-infinite points"))
-            .map(|x| x.to_string())
+            .ok_or("No non-infinite points")?
+            .to_string();
+        Ok(max_point)
     },
     part2: |input| Ok(find_region_size(input, 10_000)?.to_string()),
 };
 
-fn get_points(input: &str) -> Result<Vec<Point>, failure::Error> {
+fn get_points(input: &str) -> Result<Vec<Point>, Box<dyn Error + '_>> {
     input
         .lines()
         .map(|line| {
-            let (rest, point) =
-                point(CompleteStr(line)).map_err(|e| format_err!("Parse failure: {}", e))?;
+            let (rest, point) = point(CompleteStr(line))?;
             if rest.is_empty() {
                 Ok(point)
             } else {
-                bail!("Text found in a line after point");
+                Err("Text found in a line after point")?
             }
         })
         .collect()
@@ -75,7 +75,7 @@ struct Point {
     count: u32,
 }
 
-fn find_region_size(input: &str, max_total_distance: i32) -> Result<usize, failure::Error> {
+fn find_region_size(input: &str, max_total_distance: i32) -> Result<usize, Box<dyn Error + '_>> {
     let points = get_points(input)?;
     let range_modifier = max_total_distance / points.len() as i32;
     let (min_x, max_x) = points
@@ -83,7 +83,7 @@ fn find_region_size(input: &str, max_total_distance: i32) -> Result<usize, failu
         .map(|p| p.x)
         .minmax()
         .into_option()
-        .ok_or_else(|| err_msg("No points"))?;
+        .ok_or("No points")?;
     let (min_y, max_y) = points.iter().map(|p| p.y).minmax().into_option().unwrap();
     let safe_area = (min_x - range_modifier..=max_x + range_modifier)
         .flat_map(|x| (min_y - range_modifier..=max_y + range_modifier).map(move |y| (y, x)))

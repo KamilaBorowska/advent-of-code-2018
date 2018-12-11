@@ -1,7 +1,7 @@
 use crate::Solution;
-use failure::err_msg;
 use itertools::Itertools;
 use regex::Regex;
+use std::error::Error;
 
 const FONT_HEIGHT: i32 = 10;
 
@@ -10,7 +10,7 @@ pub(super) const DAY10: Solution = Solution {
     part2: |input| Ok(run_simulation(input)?.1.to_string()),
 };
 
-fn run_simulation(input: &str) -> Result<(String, usize), failure::Error> {
+fn run_simulation(input: &str) -> Result<(String, usize), Box<dyn Error>> {
     let mut particles = get_particles(input)?;
     for i in 0.. {
         let (min_y, max_y) = particles
@@ -46,7 +46,7 @@ fn run_simulation(input: &str) -> Result<(String, usize), failure::Error> {
     unreachable!()
 }
 
-fn get_particles(input: &str) -> Result<Vec<Particle>, failure::Error> {
+fn get_particles(input: &str) -> Result<Vec<Particle>, Box<dyn Error>> {
     let regex = Regex::new(
         r"(?x)
             ^
@@ -59,9 +59,7 @@ fn get_particles(input: &str) -> Result<Vec<Particle>, failure::Error> {
     input
         .lines()
         .map(|line| {
-            let caps = regex
-                .captures(line)
-                .ok_or_else(|| err_msg("Match failure"))?;
+            let caps = regex.captures(line).ok_or("Match failure")?;
             Ok(Particle {
                 position_x: caps[1].parse().unwrap(),
                 position_y: caps[2].parse().unwrap(),

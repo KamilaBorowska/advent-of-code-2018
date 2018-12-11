@@ -1,8 +1,8 @@
 use crate::Solution;
-use failure::{bail, err_msg};
 use nom::types::CompleteStr;
 use nom::{call, do_parse, error_position, map_res, named, tag, take_while1, take_while1_s};
 use std::collections::HashMap;
+use std::error::Error;
 
 pub(super) const DAY3: Solution = Solution {
     part1: |input| {
@@ -20,11 +20,11 @@ pub(super) const DAY3: Solution = Solution {
                 return Ok(claim.num.to_string());
             }
         }
-        bail!("No non-overlapping claims");
+        Err("No non-overlapping claims")?
     },
 };
 
-fn get_claim_table(input: &str) -> Result<HashMap<(u16, u16), ClaimState>, failure::Error> {
+fn get_claim_table(input: &str) -> Result<HashMap<(u16, u16), ClaimState>, Box<dyn Error + '_>> {
     let mut claimed = HashMap::new();
     for claim in get_claims(input) {
         for square in get_squares(&claim?) {
@@ -37,13 +37,13 @@ fn get_claim_table(input: &str) -> Result<HashMap<(u16, u16), ClaimState>, failu
     Ok(claimed)
 }
 
-fn get_claims(input: &str) -> impl Iterator<Item = Result<Claim, failure::Error>> + '_ {
+fn get_claims(input: &str) -> impl Iterator<Item = Result<Claim, Box<dyn Error + '_>>> + '_ {
     input.lines().map(|line| {
-        let (rest, claim) = claim(CompleteStr(line)).map_err(|_| err_msg("Parse failure"))?;
+        let (rest, claim) = claim(CompleteStr(line))?;
         if rest.is_empty() {
             Ok(claim)
         } else {
-            bail!("Unexpected additional text after a claim")
+            Err("Unexpected additional text after a claim")?
         }
     })
 }

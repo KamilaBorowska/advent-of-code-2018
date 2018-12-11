@@ -1,5 +1,4 @@
 use crate::Solution;
-use failure::{bail, err_msg};
 use std::collections::HashSet;
 
 pub(super) const DAY1: Solution = Solution {
@@ -9,7 +8,7 @@ pub(super) const DAY1: Solution = Solution {
             sum = line
                 .parse::<i64>()?
                 .checked_add(sum)
-                .ok_or_else(|| err_msg("Integer overflow"))?;
+                .ok_or("Integer overflow")?;
         }
         Ok(sum.to_string())
     },
@@ -24,11 +23,9 @@ pub(super) const DAY1: Solution = Solution {
             if !found.insert(sum) {
                 return Ok(sum.to_string());
             }
-            sum = line
-                .checked_add(sum)
-                .ok_or_else(|| err_msg("Integer overflow"))?;
+            sum = line.checked_add(sum).ok_or("Integer overflow")?;
         }
-        bail!("Empty input");
+        Err("Empty input")?
     },
 };
 
