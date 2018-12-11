@@ -18,10 +18,11 @@ pub(super) const DAY11: Solution = Solution {
     part2: |serial| {
         let serial: i32 = serial.parse()?;
         #[allow(clippy::range_plus_one)]
-        let (x, y, size, _) = (1..300 + 1)
+        let (x, y, size, _) = (0..300 * 300)
             .into_par_iter()
-            .flat_map(|x| (1..300 + 1).into_par_iter().map(move |y| (x, y)))
-            .map(|(x, y)| {
+            .map(|pos| {
+                let x = pos % 300 + 1;
+                let y = pos / 300 + 1;
                 let mut max_size = 1;
                 let mut max_sum = get_power(serial, x, y);
                 let mut sum = max_sum;
