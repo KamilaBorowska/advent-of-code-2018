@@ -1,11 +1,11 @@
 use crate::Solution;
-use failure::{bail, err_msg};
 use nom::types::CompleteStr;
 use nom::{
     alt, call, delimited, do_parse, error_position, map_res, named, tag, take_while1,
     take_while1_s, tuple_parser,
 };
 use std::collections::HashMap;
+use std::error::Error;
 use std::hash::Hash;
 use std::ops::Range;
 use std::vec;
@@ -25,8 +25,7 @@ pub(super) const DAY4: Solution = Solution {
                     .or_insert(0) += 1;
             }
         }
-        let worst_guard =
-            find_max_value(&total_asleep_times).ok_or_else(|| err_msg("No guards"))?;
+        let worst_guard = find_max_value(&total_asleep_times).ok_or("No guards")?;
         let minute = find_max_value(&asleep_times[worst_guard]).unwrap();
         Ok((worst_guard * minute).to_string())
     },
@@ -38,7 +37,7 @@ pub(super) const DAY4: Solution = Solution {
                 *asleep_times.entry((guard, minute)).or_insert(0) += 1;
             }
         }
-        let (minute, guard) = find_max_value(&asleep_times).ok_or_else(|| err_msg("No guards"))?;
+        let (minute, guard) = find_max_value(&asleep_times).ok_or("No guards")?;
         Ok((minute * guard).to_string())
     },
 };
@@ -58,19 +57,15 @@ impl LineParser<'_> {
         }
     }
 
-    fn next_sleep_range(&mut self) -> Result<Option<(u32, Range<u32>)>, failure::Error> {
+    fn next_sleep_range(&mut self) -> Result<Option<(u32, Range<u32>)>, Box<dyn Error>> {
         for line in &mut self.iterator {
             let Line { minute, action } = get_action_line(line)?;
             match action {
                 Action::BeginsShift { guard } => self.current_guard = Some(guard),
                 Action::FallsAsleep => self.asleep_start_time = Some(minute),
                 Action::WakesUp => {
-                    let current_guard = self
-                        .current_guard
-                        .ok_or_else(|| err_msg("No guard on shift"))?;
-                    let current_asleep_time = self
-                        .asleep_start_time
-                        .ok_or_else(|| err_msg("Guard didn't sleep"))?;
+                    let current_guard = self.current_guard.ok_or("No guard on shift")?;
+                    let current_asleep_time = self.asleep_start_time.ok_or("Guard didn't sleep")?;
                     return Ok(Some((current_guard, current_asleep_time..minute)));
                 }
             }
@@ -85,13 +80,12 @@ fn get_sorted_lines_iter(input: &str) -> vec::IntoIter<&str> {
     lines.into_iter()
 }
 
-fn get_action_line(line: &str) -> Result<Line, failure::Error> {
-    let (rest, action_line) =
-        action_line(CompleteStr(line)).map_err(|_| err_msg("Parse failure"))?;
+fn get_action_line(line: &str) -> Result<Line, Box<dyn Error>> {
+    let (rest, action_line) = action_line(CompleteStr(line)).map_err(|_| "Parse failure")?;
     if rest.is_empty() {
         Ok(action_line)
     } else {
-        bail!("Unexpected additional text after an action line")
+        Err("Unexpected additional text after an action line")?
     }
 }
 

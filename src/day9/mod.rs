@@ -1,7 +1,7 @@
 use crate::Solution;
-use failure::{bail, err_msg, format_err};
 use nom::types::CompleteStr;
 use nom::{call, do_parse, error_position, map_res, named, tag, take_while1};
+use std::error::Error;
 
 pub(super) const DAY9: Solution = Solution {
     part1: |input| {
@@ -14,13 +14,13 @@ pub(super) const DAY9: Solution = Solution {
     },
 };
 
-fn get_max_score(players: usize, last_marble: u32) -> Result<String, failure::Error> {
+fn get_max_score(players: usize, last_marble: u32) -> Result<String, Box<dyn Error>> {
     let mut marbles = ArrayCyclicList::new(0);
     let mut cursor = marbles.cursor();
     let mut scores = vec![0; players];
     let mut player_numbers = (0..players).cycle();
     for marble_number in 1..=last_marble {
-        let player_number = player_numbers.next().ok_or_else(|| err_msg("No players"))?;
+        let player_number = player_numbers.next().ok_or("No players")?;
         if marble_number % 23 == 0 {
             for _ in 0..=7 {
                 cursor.prev();
@@ -35,13 +35,13 @@ fn get_max_score(players: usize, last_marble: u32) -> Result<String, failure::Er
     Ok(scores.iter().max().unwrap().to_string())
 }
 
-fn get_puzzle_input(input: &str) -> Result<(usize, u32), failure::Error> {
+fn get_puzzle_input(input: &str) -> Result<(usize, u32), Box<dyn Error>> {
     let (rest, result) =
-        puzzle_input(CompleteStr(input)).map_err(|e| format_err!("Parse error: {}", e))?;
+        puzzle_input(CompleteStr(input)).map_err(|e| format!("Parse error: {}", e))?;
     if rest.is_empty() {
         Ok(result)
     } else {
-        bail!("Found text after input")
+        Err("Found text after input")?
     }
 }
 

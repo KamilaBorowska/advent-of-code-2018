@@ -1,5 +1,4 @@
 use crate::Solution;
-use failure::err_msg;
 use std::collections::HashSet;
 
 pub(super) const DAY5: Solution = Solution {
@@ -17,7 +16,7 @@ pub(super) const DAY5: Solution = Solution {
                 )
             })
             .min()
-            .ok_or_else(|| err_msg("Empty input"))?
+            .ok_or("Empty input")?
             .to_string())
     },
 };

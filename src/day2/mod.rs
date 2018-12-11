@@ -1,5 +1,4 @@
 use crate::Solution;
-use failure::err_msg;
 use std::collections::HashMap;
 
 pub(super) const DAY2: Solution = Solution {
@@ -27,7 +26,7 @@ pub(super) const DAY2: Solution = Solution {
             .enumerate()
             .flat_map(|(i, &a)| lines[i + 1..].iter().map(move |&b| (a, b)))
             .find(|&pair| differs_by_exactly_one_character(pair))
-            .ok_or_else(|| err_msg("No common IDs found"))?;
+            .ok_or("No common IDs found")?;
         Ok(zip_chars(pair)
             .filter(|(a, b)| a == b)
             .map(|(a, _)| a)
