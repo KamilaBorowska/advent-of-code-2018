@@ -1,4 +1,5 @@
 use crate::Solution;
+use rayon::prelude::*;
 
 pub(super) const DAY11: Solution = Solution {
     part1: |serial| {
@@ -19,9 +20,18 @@ pub(super) const DAY11: Solution = Solution {
     },
     part2: |serial| {
         let serial: i32 = serial.parse()?;
-        let (x, y, size) = (1..=300)
-            .flat_map(|size| (1..=300 - size + 1).map(move |x| (x, size)))
-            .flat_map(|(x, size)| (1..=300 - size + 1).map(move |y| (x, y, size)))
+        let (x, y, size) = (1..300 + 1)
+            .into_par_iter()
+            .flat_map(|size| {
+                (1..300 - size + 1 + 1)
+                    .into_par_iter()
+                    .map(move |x| (x, size))
+            })
+            .flat_map(|(x, size)| {
+                (1..300 - size + 1 + 1)
+                    .into_par_iter()
+                    .map(move |y| (x, y, size))
+            })
             .max_by_key(|&(x, y, size)| -> i32 {
                 (x..x + size)
                     .flat_map(|x| (y..y + size).map(move |y| (x, y)))
