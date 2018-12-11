@@ -25,7 +25,7 @@ pub(super) const DAY11: Solution = Solution {
                 let mut max_size = 1;
                 let mut max_sum = get_power(serial, x, y);
                 let mut sum = max_sum;
-                for size in 1..=300 - x.max(y) {
+                for size in 1..300 - x.max(y) {
                     sum += get_power(serial, x + size, y + size);
                     for x_mod in 0..size {
                         sum += get_power(serial, x + x_mod, y + size);
