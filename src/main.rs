@@ -4,6 +4,7 @@ use structopt::StructOpt;
 
 mod day1;
 mod day10;
+mod day11;
 mod day2;
 mod day3;
 mod day4;
@@ -31,6 +32,7 @@ const SOLUTIONS: &[Solution] = &[
     day8::DAY8,
     day9::DAY9,
     day10::DAY10,
+    day11::DAY11,
 ];
 
 #[derive(StructOpt)]
