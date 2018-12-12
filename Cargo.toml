@@ -10,3 +10,6 @@ nom = "4.1.1"
 rayon = "1.0.3"
 regex = "1.1.0"
 structopt = "0.2.14"
+
+[profile.test]
+opt-level = 2
