@@ -5,6 +5,7 @@ authors = ["Konrad Borowski <konrad@borowski.pw>"]
 edition = "2018"
 
 [dependencies]
+arraymap = "0.1.1"
 itertools = "0.7.11"
 nom = "4.1.1"
 rayon = "1.0.3"
