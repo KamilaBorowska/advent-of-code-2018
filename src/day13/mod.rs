@@ -1,5 +1,6 @@
 use crate::Solution;
 use num_complex::Complex;
+use std::collections::hash_map::Entry;
 use std::collections::{HashMap, HashSet};
 use std::error::Error;
 
@@ -28,9 +29,11 @@ pub(crate) const DAY13: Solution = Solution {
                 (position.re, position.im)
             });
             for i in indexes {
-                if let Some(cart) = carts.get_mut(&i) {
-                    if let Some((position, other)) = cart.tick(&mut InsertMap(i, &mut positions))? {
-                        carts.remove(&i);
+                if let Entry::Occupied(mut occupied) = carts.entry(i) {
+                    if let Some((position, other)) =
+                        occupied.get_mut().tick(&mut InsertMap(i, &mut positions))?
+                    {
+                        occupied.remove();
                         carts.remove(&other);
                         positions.remove(&position);
                     }
