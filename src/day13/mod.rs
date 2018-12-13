@@ -25,7 +25,7 @@ pub(crate) const DAY13: Solution = Solution {
             let mut indexes: Vec<_> = carts.keys().cloned().collect();
             indexes.sort_by_key(|i| {
                 let position = carts[i].position;
-                (position.re, position.im)
+                (position.im, position.re)
             });
             for i in indexes {
                 if let Some(cart) = carts.get_mut(&i) {
