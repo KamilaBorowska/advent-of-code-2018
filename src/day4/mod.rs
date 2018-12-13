@@ -15,9 +15,9 @@ pub(super) const DAY4: Solution = Solution {
         let mut total_asleep_times = HashMap::new();
         let mut asleep_times = HashMap::new();
         let mut parser = LineParser::new(input);
-        while let Some((guard, range)) = parser.next_sleep_range()? {
-            *total_asleep_times.entry(guard).or_insert(0) += range.len();
-            for minute in range {
+        while let Some(SleepRange { guard, minutes }) = parser.next_sleep_range()? {
+            *total_asleep_times.entry(guard).or_insert(0) += minutes.len();
+            for minute in minutes {
                 *asleep_times
                     .entry(guard)
                     .or_insert_with(HashMap::new)
@@ -32,8 +32,8 @@ pub(super) const DAY4: Solution = Solution {
     part2: |input| {
         let mut asleep_times = HashMap::new();
         let mut parser = LineParser::new(input);
-        while let Some((guard, range)) = parser.next_sleep_range()? {
-            for minute in range {
+        while let Some(SleepRange { guard, minutes }) = parser.next_sleep_range()? {
+            for minute in minutes {
                 *asleep_times.entry((guard, minute)).or_insert(0) += 1;
             }
         }
@@ -57,7 +57,7 @@ impl<'a> LineParser<'a> {
         }
     }
 
-    fn next_sleep_range(&mut self) -> Result<Option<(u32, Range<u32>)>, Box<dyn Error + 'a>> {
+    fn next_sleep_range(&mut self) -> Result<Option<SleepRange>, Box<dyn Error + 'a>> {
         for line in &mut self.iterator {
             let Line { minute, action } = get_action_line(line)?;
             match action {
@@ -66,7 +66,10 @@ impl<'a> LineParser<'a> {
                 Action::WakesUp => {
                     let current_guard = self.current_guard.ok_or("No guard on shift")?;
                     let current_asleep_time = self.asleep_start_time.ok_or("Guard didn't sleep")?;
-                    return Ok(Some((current_guard, current_asleep_time..minute)));
+                    return Ok(Some(SleepRange {
+                        guard: current_guard,
+                        minutes: current_asleep_time..minute,
+                    }));
                 }
             }
         }
@@ -135,6 +138,11 @@ named!(
         tag!("wakes up") => { |_| Action::WakesUp }
     )
 );
+
+struct SleepRange {
+    guard: u32,
+    minutes: Range<u32>,
+}
 
 fn find_max_value<K>(map: &HashMap<K, usize>) -> Option<&K>
 where
