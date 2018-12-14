@@ -1,6 +1,13 @@
 use crate::Solution;
 use std::error::Error;
 
+macro_rules! do_while {
+    { ($cond:expr) $block:block } => {
+        $block
+        while $cond $block
+    }
+}
+
 pub(crate) const DAY14: Solution = Solution {
     part1: |input| {
         let input: usize = input.parse()?;
@@ -8,16 +15,12 @@ pub(crate) const DAY14: Solution = Solution {
         let mut elves = [0, 1];
         while recipes.len() < input + 10 {
             let mut new_recipe: u8 = elves.iter().map(|&i| recipes[i]).sum();
-            if new_recipe == 0 {
-                recipes.push(0);
-            } else {
-                let start_from = recipes.len();
-                while new_recipe != 0 {
-                    recipes.push(new_recipe % 10);
-                    new_recipe /= 10;
-                }
-                recipes[start_from..].reverse();
-            }
+            let start_from = recipes.len();
+            do_while! { (new_recipe != 0) {
+                recipes.push(new_recipe % 10);
+                new_recipe /= 10;
+            } }
+            recipes[start_from..].reverse();
             for elf in &mut elves {
                 *elf = (*elf + usize::from(recipes[*elf]) + 1) % recipes.len();
             }
@@ -34,15 +37,11 @@ pub(crate) const DAY14: Solution = Solution {
         loop {
             let mut new_recipe: u8 = elves.iter().map(|&i| recipes[i]).sum();
             let start_from = recipes.len();
-            if new_recipe == 0 {
-                recipes.push(0);
-            } else {
-                while new_recipe != 0 {
-                    recipes.push(new_recipe % 10);
-                    new_recipe /= 10;
-                }
-                recipes[start_from..].reverse();
-            }
+            do_while! { (new_recipe != 0)  {
+                recipes.push(new_recipe % 10);
+                new_recipe /= 10;
+            } }
+            recipes[start_from..].reverse();
             for pos in start_from..recipes.len() {
                 if pos > input.len() && input == &recipes[pos - input.len()..pos] {
                     return Ok((pos - input.len()).to_string());
