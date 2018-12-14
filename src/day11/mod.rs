@@ -17,7 +17,6 @@ pub(super) const DAY11: Solution = Solution {
     },
     part2: |serial| {
         let serial: i32 = serial.parse()?;
-        #[allow(clippy::range_plus_one)]
         let (x, y, size, _) = (0..300 * 300)
             .into_par_iter()
             .map(|pos| {
