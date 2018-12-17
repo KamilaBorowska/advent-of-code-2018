@@ -68,7 +68,10 @@ impl Board {
     }
 
     fn is_solid(&self, x: i32, y: i32) -> bool {
-        [Some(&BlockState::Solid), Some(&BlockState::SolidWater)].contains(&self.map.get(&(x, y)))
+        self.map
+            .get(&(x, y))
+            .filter(|v| [BlockState::Solid, BlockState::SolidWater].contains(v))
+            .is_some()
     }
 
     fn has_both_walls(&self, x: i32, y: i32) -> bool {
