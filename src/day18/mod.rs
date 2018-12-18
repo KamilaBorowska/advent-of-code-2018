@@ -70,13 +70,11 @@ struct Board {
 
 impl Board {
     fn get(&self, x: usize, y: usize) -> Option<Tile> {
-        Some(
-            *self
-                .tiles
-                .get(y.checked_mul(self.width)?..)?
-                .get(..self.width)?
-                .get(x)?,
-        )
+        self.tiles
+            .get(y.checked_mul(self.width)?..)?
+            .get(..self.width)?
+            .get(x)
+            .cloned()
     }
 
     fn next_state(&self) -> Board {
