@@ -143,24 +143,21 @@ impl Maze {
         let mut to_check = VecDeque::new();
         to_check.push_back((0, 0));
         let mut visited = HashSet::new();
-        visited.insert((0, 0));
         let mut path_length = 0;
         let mut last_of_level = 1;
         while let Some(position) = to_check.pop_front() {
             last_of_level -= 1;
-            visited.insert(position);
-            for &room in &self.rooms[&position].doors {
-                if !visited.insert(room) {
-                    continue;
+            if visited.insert(position) {
+                for &room in &self.rooms[&position].doors {
+                    to_check.push_back(room);
                 }
-                to_check.push_back(room);
+            }
+            if visited.len() == self.rooms.len() {
+                return Ok(path_length);
             }
             if last_of_level == 0 {
                 path_length += 1;
                 last_of_level = to_check.len();
-            }
-            if visited.len() == self.rooms.len() {
-                return Ok(path_length);
             }
         }
         Err("Not all points are reachable")?
