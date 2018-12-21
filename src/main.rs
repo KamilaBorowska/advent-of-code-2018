@@ -2,6 +2,7 @@ use std::error::Error;
 use std::io::{self, Read, Write};
 use structopt::StructOpt;
 
+mod cpu;
 mod day1;
 mod day10;
 mod day11;
@@ -15,6 +16,7 @@ mod day18;
 mod day19;
 mod day2;
 mod day20;
+mod day21;
 mod day3;
 mod day4;
 mod day5;
@@ -51,6 +53,7 @@ const SOLUTIONS: &[Solution] = &[
     day18::DAY18,
     day19::DAY19,
     day20::DAY20,
+    day21::DAY21,
 ];
 
 #[derive(StructOpt)]
