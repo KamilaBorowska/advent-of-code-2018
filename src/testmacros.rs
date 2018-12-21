@@ -3,33 +3,35 @@ macro_rules! test {
     (__internal $ident:tt . $part:tt) => {};
     (
         __internal $ident:tt . $part:tt
+        $( #[ $meta:meta ] )*
         input: $output:expr,
         $($tests:tt)*
     ) => {
-        #[test]
-        fn input() {
+        #[test] $( #[ $meta ] )* fn input() {
             assert_eq!(($ident.$part)(include_str!("input")).unwrap(), concat!($output));
         }
         super::test!(__internal $ident.$part $($tests)*);
     };
     (__internal $ident:tt . $part:tt) => {};
     (
-        __internal $ident:tt . $part:tt
+        __internal
+        $ident:tt . $part:tt
+        $( #[ $meta:meta ] )*
         $name:ident: $input:expr => $output:expr,
         $($tests:tt)*
     ) => {
-        #[test]
-        fn $name() {
+        #[test] $( #[ $meta ] )* fn $name() {
             assert_eq!(($ident.$part)($input).unwrap(), concat!($output));
         }
         super::test!(__internal $ident.$part $($tests)*);
     };
     (
         __internal $ident:tt . $part:tt
+        $( #[ $meta:meta ] )*
         fn $name:ident() $b:block
         $($tests:tt)*
     ) => {
-        #[test] fn $name() $b
+        #[test] $( #[ $meta ] )* fn $name() $b
         super::test!(__internal $ident.$part $($tests)*);
     };
     (
