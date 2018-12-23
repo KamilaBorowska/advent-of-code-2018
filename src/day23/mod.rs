@@ -39,17 +39,16 @@ pub(crate) const DAY23: Solution = Solution {
         }
         let optimize = Optimize::new(&ctx);
         optimize.maximize(&in_ranges);
+        let sum = zabs(&ctx, &zx).add(&[&zabs(&ctx, &zy), &zabs(&ctx, &zz)]);
+        optimize.minimize(&sum);
         optimize.check();
-        let mut sum = 0;
-        for var in &[zx, zy, zz] {
-            sum += optimize
-                .get_model()
-                .eval(&var)
-                .ok_or("Variable not available")?
-                .as_i64()
-                .ok_or("Variable not obtainable as i64")?
-                .abs();
-        }
+        let sum = optimize
+            .get_model()
+            .eval(&sum)
+            .ok_or("Variable not available")?
+            .as_i64()
+            .ok_or("Variable not obtainable as i64")?
+            .abs();
         Ok(sum.to_string())
     },
 };
