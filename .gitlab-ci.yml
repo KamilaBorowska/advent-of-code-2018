@@ -4,6 +4,7 @@ stages:
 
 test:1.31:
   script: &test_script
+  - apt-get install -y libz3-dev
   - &print_version rustc --version && cargo --version
   - cargo test --all --all-features --verbose
   image: rust:1.31
