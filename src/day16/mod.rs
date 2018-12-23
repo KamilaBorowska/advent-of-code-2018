@@ -47,7 +47,6 @@ fn get_input(text: &str) -> Result<Input, Box<dyn Error + '_>> {
     if rest.is_empty() {
         Ok(result)
     } else {
-        println!("{}", rest);
         Err("Found text after input")?
     }
 }

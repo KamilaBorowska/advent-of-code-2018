@@ -33,15 +33,6 @@ pub(crate) const DAY15: Solution = Solution {
             {
                 continue 'checking_powers;
             }
-            println!(
-                "{} {} {}",
-                power,
-                rounds,
-                game.players
-                    .iter()
-                    .map(|p| u32::from(p.hit_points))
-                    .sum::<u32>()
-            );
             return Ok((rounds
                 * game
                     .players
