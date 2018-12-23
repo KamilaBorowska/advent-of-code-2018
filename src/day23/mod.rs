@@ -47,7 +47,8 @@ pub(crate) const DAY23: Solution = Solution {
                 .eval(&var)
                 .ok_or("Variable not available")?
                 .as_i64()
-                .ok_or("Variable not obtainable as i64")?;
+                .ok_or("Variable not obtainable as i64")?
+                .abs();
         }
         Ok(sum.to_string())
     },
