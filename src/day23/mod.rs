@@ -78,10 +78,12 @@ named!(
     )
 );
 
-#[rustfmt::skip]
 named!(
     integer(CompleteStr<'_>) -> i32,
-    map_res!(take_while!(|c| c == '-' || char::is_digit(c, 10)), |x: CompleteStr<'_>| x.parse())
+    map_res!(
+        take_while!(|c| c == '-' || char::is_digit(c, 10)),
+        |x: CompleteStr<'_>| x.parse()
+    )
 );
 
 #[derive(Debug)]
