@@ -20,6 +20,7 @@ mod day21;
 mod day22;
 mod day23;
 mod day24;
+mod day25;
 mod day3;
 mod day4;
 mod day5;
@@ -60,6 +61,7 @@ const SOLUTIONS: &[Solution] = &[
     day22::DAY22,
     day23::DAY23,
     day24::DAY24,
+    day25::DAY25,
 ];
 
 #[derive(StructOpt)]
