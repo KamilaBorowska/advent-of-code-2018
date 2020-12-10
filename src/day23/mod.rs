@@ -1,6 +1,6 @@
 use crate::Solution;
 use nom::types::CompleteStr;
-use nom::{call, do_parse, error_position, map_res, named, tag, take_while};
+use nom::{do_parse, map_res, named, tag, take_while};
 use std::error::Error;
 use z3::{Ast, Config, Context, Optimize};
 

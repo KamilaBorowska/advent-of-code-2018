@@ -1,5 +1,5 @@
 use nom::types::CompleteStr;
-use nom::{alt, call, do_parse, error_position, many0, map_res, named, tag, take_while};
+use nom::{alt, do_parse, many0, map_res, named, tag, take_while};
 use std::error::Error;
 
 #[derive(Debug)]

@@ -1,6 +1,6 @@
 use crate::Solution;
 use nom::types::CompleteStr;
-use nom::{anychar, call, do_parse, named, tag};
+use nom::{anychar, do_parse, named, tag};
 use std::cmp::Reverse;
 use std::collections::{BinaryHeap, HashMap};
 use std::error::Error;

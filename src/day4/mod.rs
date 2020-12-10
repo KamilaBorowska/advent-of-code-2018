@@ -1,8 +1,6 @@
 use crate::Solution;
 use nom::types::CompleteStr;
-use nom::{
-    alt, call, delimited, do_parse, error_position, map_res, named, tag, take_while1, tuple_parser,
-};
+use nom::{alt, delimited, do_parse, map_res, named, r, tag, take_while1};
 use std::collections::HashMap;
 use std::error::Error;
 use std::hash::Hash;
