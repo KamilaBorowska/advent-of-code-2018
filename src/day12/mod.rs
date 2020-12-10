@@ -26,7 +26,7 @@ fn run_simulation(input: &str, generations: i64) -> Result<i64, Box<dyn Error + 
         beginning += trimmed_elements as i64 - 2;
         state = (-2..trimmed_state.len() as isize + 2)
             .map(|i| {
-                rules.contains(&[-2, -1, 0, 1, 2].map(|m| {
+                rules.contains(&ArrayMap::map(&[-2, -1, 0, 1, 2], |m| {
                     trimmed_state
                         .get((i + m) as usize)
                         .cloned()
