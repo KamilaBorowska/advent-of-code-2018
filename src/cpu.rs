@@ -80,7 +80,7 @@ pub(crate) enum InstructionKind {
 pub(crate) fn get_cpu(input: &str, registers: [usize; 6]) -> Result<CPU, Box<dyn Error + '_>> {
     match cpu(CompleteStr(input))? {
         (CompleteStr(""), cpu) => Ok(CPU { registers, ..cpu }),
-        (text, _) => Err(format!("Found text after input: {}", text))?,
+        (text, _) => Err(format!("Found text after input: {}", text).into()),
     }
 }
 

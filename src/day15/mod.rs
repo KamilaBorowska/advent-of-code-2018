@@ -41,7 +41,7 @@ pub(crate) const DAY15: Solution = Solution {
                     .sum::<u32>())
             .to_string());
         }
-        Err("Even an instant-kill elf won't stop the goblins")?
+        Err("Even an instant-kill elf won't stop the goblins".into())
     },
 };
 
@@ -122,7 +122,8 @@ impl Game<'_> {
             target = self.find_nearby_target(positions, player);
         }
         if let Some(target) = target {
-            self.hurt(positions, target, player.attack_power);
+            let attack_power = player.attack_power;
+            self.hurt(positions, target, attack_power);
         }
     }
 

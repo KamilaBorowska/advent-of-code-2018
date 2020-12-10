@@ -90,7 +90,7 @@ impl Map {
     fn new(text: &str) -> Result<Self, Box<dyn Error + '_>> {
         match input(CompleteStr(text))? {
             (CompleteStr(""), rest) => Ok(rest),
-            _ => Err("Unexpected text after input")?,
+            _ => Err("Unexpected text after input".into()),
         }
     }
 

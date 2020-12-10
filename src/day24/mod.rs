@@ -17,7 +17,7 @@ pub(crate) const DAY24: Solution = Solution {
                 return Ok(sides[b].iter().map(|b| b.units).sum::<u32>().to_string());
             }
         }
-        Err("Neither side won")?
+        Err("Neither side won".into())
     },
     part2: |input| {
         let sides = get_sides(input)?;
@@ -38,7 +38,7 @@ pub(crate) const DAY24: Solution = Solution {
 fn get_sides(input: &str) -> Result<[Vec<Army<'_>>; 2], Box<dyn Error + '_>> {
     match sides(CompleteStr(input))? {
         (CompleteStr(""), sides) => Ok(sides),
-        _ => Err("Unexpected text after match")?,
+        _ => Err("Unexpected text after match".into()),
     }
 }
 

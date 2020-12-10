@@ -40,7 +40,7 @@ fn get_puzzle_input(input: &str) -> Result<(usize, u32), Box<dyn Error + '_>> {
     if rest.is_empty() {
         Ok(result)
     } else {
-        Err("Found text after input")?
+        Err("Found text after input".into())
     }
 }
 

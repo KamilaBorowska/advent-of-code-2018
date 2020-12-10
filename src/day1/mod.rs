@@ -25,7 +25,7 @@ pub(super) const DAY1: Solution = Solution {
             }
             sum = line.checked_add(sum).ok_or("Integer overflow")?;
         }
-        Err("Empty input")?
+        Err("Empty input".into())
     },
 };
 

@@ -56,7 +56,7 @@ pub(crate) const DAY23: Solution = Solution {
 fn get_nanobot(line: &str) -> Result<Nanobot, Box<dyn Error + '_>> {
     match nanobot(CompleteStr(line))? {
         (CompleteStr(""), nanobot) => Ok(nanobot),
-        _ => Err("Found text after nanobot")?,
+        _ => Err("Found text after nanobot".into()),
     }
 }
 

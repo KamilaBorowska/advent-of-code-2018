@@ -131,7 +131,7 @@ enum BlockState {
 fn get_line(text: &str) -> Result<Line, Box<dyn Error + '_>> {
     match line(CompleteStr(text))? {
         (CompleteStr(""), line) => Ok(line),
-        _ => Err("Unexpected text after a line")?,
+        _ => Err("Unexpected text after a line".into()),
     }
 }
 

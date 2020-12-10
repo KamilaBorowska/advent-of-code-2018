@@ -32,16 +32,16 @@ fn get_regex_without_anchors(hir: &Hir) -> Result<&[Hir], Box<dyn Error>> {
         let (start, hirs) = hirs.split_first().unwrap();
         if let HirKind::Anchor(Anchor::StartText) = start.kind() {
         } else {
-            Err("Regular expression doesn't start with ^")?
+            return Err("Regular expression doesn't start with ^".into());
         }
         let (end, hirs) = hirs.split_last().unwrap();
         if let HirKind::Anchor(Anchor::EndText) = end.kind() {
         } else {
-            Err("Regular expression doesn't end with $")?
+            return Err("Regular expression doesn't end with $".into());
         }
         Ok(hirs)
     } else {
-        Err("Regular expression is too short")?
+        Err("Regular expression is too short".into())
     }
 }
 
@@ -109,7 +109,7 @@ impl Maze {
                 Ok(())
             }
             HirKind::Concat(hirs) => self.put_hir_from_concat_iter(&hirs, position, callback),
-            _ => Err(format!("Unexpected HIR kind: {}", hir))?,
+            _ => Err(format!("Unexpected HIR kind: {}", hir).into()),
         }
     }
 
@@ -124,7 +124,7 @@ impl Maze {
             'E' => new_position.0 += 1,
             'N' => new_position.1 += 1,
             'S' => new_position.1 -= 1,
-            _ => Err(format!("Unexpected letter {:?}", letter))?,
+            _ => return Err(format!("Unexpected letter {:?}", letter).into()),
         }
         self.rooms
             .entry(new_position)
@@ -160,7 +160,7 @@ impl Maze {
                 last_of_level = to_check.len();
             }
         }
-        Err("Not all points are reachable")?
+        Err("Not all points are reachable".into())
     }
 
     fn count_rooms_with_shortest_path_through_at_least_1000_doors(
@@ -192,7 +192,7 @@ impl Maze {
                 last_of_level = to_check.len();
             }
         }
-        Err("Not all points are reachable")?
+        Err("Not all points are reachable".into())
     }
 }
 

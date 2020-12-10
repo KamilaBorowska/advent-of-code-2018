@@ -26,7 +26,7 @@ pub(crate) const DAY25: Solution = Solution {
 fn get_position(line: &str) -> Result<Position, Box<dyn Error + '_>> {
     match position(CompleteStr(line))? {
         (CompleteStr(""), position) => Ok(position),
-        _ => Err("Found text after constellation")?,
+        _ => Err("Found text after constellation".into()),
     }
 }
 

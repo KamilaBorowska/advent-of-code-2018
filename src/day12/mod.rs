@@ -14,7 +14,7 @@ fn run_simulation(input: &str, generations: i64) -> Result<i64, Box<dyn Error + 
     let mut lines = input.lines();
     let mut state = get_initial_state(lines.next().ok_or("Empty input")?)?;
     if lines.next() != Some("") {
-        Err("Expected empty line")?
+        return Err("Expected empty line".into());
     }
     let rules = get_rules(lines)?;
     let mut beginning = 0;
@@ -63,7 +63,7 @@ fn trim_state(mut input: &[bool]) -> (usize, &[bool]) {
 fn get_initial_state(input: &str) -> Result<Vec<bool>, Box<dyn Error + '_>> {
     match initial_state(CompleteStr(input))? {
         (CompleteStr(""), line) => Ok(line),
-        _ => Err("Found text after a line")?,
+        _ => Err("Found text after a line".into()),
     }
 }
 
@@ -79,13 +79,13 @@ fn get_rules<'a>(
     for line in lines {
         match rule(CompleteStr(line))? {
             (CompleteStr(""), ([false, false, false, false, false], true)) => {
-                Err("Sequence of five dots cannot map to octothorpes")?
+                return Err("Sequence of five dots cannot map to octothorpes".into());
             }
             (CompleteStr(""), (input, true)) => {
                 output.insert(input);
             }
             (CompleteStr(""), (_, false)) => {}
-            _ => Err("Found text after a line")?,
+            _ => return Err("Found text after a line".into()),
         }
     }
     Ok(output)

@@ -1,6 +1,6 @@
 use crate::Solution;
 use nom::types::CompleteStr;
-use nom::{call, do_parse, error_position, map_res, named, tag, take_while1, take_while1_s};
+use nom::{call, do_parse, error_position, map_res, named, tag, take_while1};
 use std::collections::HashMap;
 use std::error::Error;
 
@@ -20,7 +20,7 @@ pub(super) const DAY3: Solution = Solution {
                 return Ok(claim.num.to_string());
             }
         }
-        Err("No non-overlapping claims")?
+        Err("No non-overlapping claims".into())
     },
 };
 
@@ -43,7 +43,7 @@ fn get_claims(input: &str) -> impl Iterator<Item = Result<Claim, Box<dyn Error +
         if rest.is_empty() {
             Ok(claim)
         } else {
-            Err("Unexpected additional text after a claim")?
+            Err("Unexpected additional text after a claim".into())
         }
     })
 }
@@ -93,10 +93,9 @@ named!(
 
 named!(
     integer<CompleteStr<'_>, u16>,
-    map_res!(
-        take_while1_s!(|c| char::is_digit(c, 10)),
-        |x: CompleteStr<'_>| x.parse()
-    )
+    map_res!(take_while1!(|c| char::is_digit(c, 10)), |x: CompleteStr<
+        '_,
+    >| x.parse())
 );
 
 #[derive(Copy, Clone, PartialEq, Eq)]

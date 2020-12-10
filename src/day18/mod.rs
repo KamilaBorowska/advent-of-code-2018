@@ -56,7 +56,7 @@ fn parse_input(input: &str) -> Result<Board, Box<dyn Error>> {
                 }
                 last_width = Some(i);
             }
-            _ => Err(format!("Unexpected character {:?}", char::from(c)))?,
+            _ => return Err(format!("Unexpected character {:?}", char::from(c)).into()),
         }
     }
     Ok(Board { tiles, width })

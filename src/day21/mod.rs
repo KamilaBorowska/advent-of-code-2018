@@ -15,7 +15,7 @@ pub(crate) const DAY21: Solution = Solution {
             }
             cpu.step();
         }
-        Err("Expected to find eq instruction")?
+        Err("Expected to find eq instruction".into())
     },
     part2: |input| {
         let mut cpu = get_cpu(input, [0; 6])?;
@@ -36,7 +36,7 @@ pub(crate) const DAY21: Solution = Solution {
             }
             cpu.step();
         }
-        Err("Program halted on 0")?
+        Err("Program halted on 0".into())
     },
 };
 

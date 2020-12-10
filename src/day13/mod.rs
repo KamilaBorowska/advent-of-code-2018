@@ -103,7 +103,7 @@ impl Cart<'_> {
                         -Complex::i()
                     }
             }
-            t => Err(format!("Unrecognized tile {:?}", char::from(t)))?,
+            t => return Err(format!("Unrecognized tile {:?}", char::from(t)).into()),
         };
         Ok(self.move_cart(positions))
     }

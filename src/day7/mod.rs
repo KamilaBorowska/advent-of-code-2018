@@ -42,7 +42,7 @@ fn get_dependencies(
         if rest.is_empty() {
             Ok(point)
         } else {
-            Err("Text found in a line after a dependency")?
+            Err("Text found in a line after a dependency".into())
         }
     })
 }

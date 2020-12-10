@@ -2,6 +2,7 @@ use crate::Solution;
 use itertools::Itertools;
 use nom::types::CompleteStr;
 use nom::{call, do_parse, error_position, map_res, named, tag, take_while1};
+use std::cmp::Ordering;
 use std::error::Error;
 
 pub(super) const DAY6: Solution = Solution {
@@ -20,11 +21,15 @@ pub(super) const DAY6: Solution = Solution {
                 let mut min = None;
                 for point in &mut points {
                     let distance = (point.x - x).abs() + (point.y - y).abs();
-                    if distance < min_distance {
-                        min_distance = distance;
-                        min = Some(point);
-                    } else if distance == min_distance {
-                        min = None;
+                    match distance.cmp(&min_distance) {
+                        Ordering::Less => {
+                            min_distance = distance;
+                            min = Some(point);
+                        }
+                        Ordering::Equal => {
+                            min = None;
+                        }
+                        Ordering::Greater => {}
                     }
                 }
                 if let Some(min) = min {
@@ -52,7 +57,7 @@ fn get_points(input: &str) -> Result<Vec<Point>, Box<dyn Error + '_>> {
             if rest.is_empty() {
                 Ok(point)
             } else {
-                Err("Text found in a line after point")?
+                Err("Text found in a line after point".into())
             }
         })
         .collect()

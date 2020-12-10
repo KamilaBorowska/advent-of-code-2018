@@ -1,8 +1,7 @@
 use crate::Solution;
 use nom::types::CompleteStr;
 use nom::{
-    alt, call, delimited, do_parse, error_position, map_res, named, tag, take_while1,
-    take_while1_s, tuple_parser,
+    alt, call, delimited, do_parse, error_position, map_res, named, tag, take_while1, tuple_parser,
 };
 use std::collections::HashMap;
 use std::error::Error;
@@ -79,7 +78,7 @@ impl<'a> LineParser<'a> {
 
 fn get_sorted_lines_iter(input: &str) -> vec::IntoIter<&str> {
     let mut lines: Vec<_> = input.lines().collect();
-    lines.sort();
+    lines.sort_unstable();
     lines.into_iter()
 }
 
@@ -88,7 +87,7 @@ fn get_action_line(line: &str) -> Result<Line, Box<dyn Error + '_>> {
     if rest.is_empty() {
         Ok(action_line)
     } else {
-        Err("Unexpected additional text after an action line")?
+        Err("Unexpected additional text after an action line".into())
     }
 }
 
@@ -124,10 +123,9 @@ named!(
 
 named!(
     integer(CompleteStr<'_>) -> u32,
-    map_res!(
-        take_while1_s!(|c| char::is_digit(c, 10)),
-        |x: CompleteStr<'_>| x.parse()
-    )
+    map_res!(take_while1!(|c| char::is_digit(c, 10)), |x: CompleteStr<
+        '_,
+    >| x.parse())
 );
 
 named!(
