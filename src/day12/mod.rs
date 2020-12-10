@@ -1,7 +1,7 @@
 use crate::Solution;
 use arraymap::ArrayMap;
 use nom::types::CompleteStr;
-use nom::{alt, do_parse, many0, named, preceded, r, tag};
+use nom::{alt, do_parse, many0, named, preceded, tag};
 use std::collections::HashSet;
 use std::error::Error;
 
