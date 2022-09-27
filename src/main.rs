@@ -1,6 +1,6 @@
+use clap::Parser;
 use std::error::Error;
 use std::io::{self, Read, Write};
-use structopt::StructOpt;
 
 mod cpu;
 mod day1;
@@ -64,7 +64,7 @@ const SOLUTIONS: &[Solution] = &[
     day25::DAY25,
 ];
 
-#[derive(StructOpt)]
+#[derive(Parser)]
 struct Options {
     /// Day for which a solution should be ran
     day: u8,
@@ -73,7 +73,7 @@ struct Options {
 }
 
 fn main() -> Result<(), Box<dyn Error>> {
-    let opt = Options::from_args();
+    let opt = Options::parse();
     let solution = SOLUTIONS
         .get(usize::from(opt.day) - 1)
         .ok_or("Day number out of range")?;
